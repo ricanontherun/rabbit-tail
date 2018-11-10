@@ -1,0 +1,13 @@
+{
+  "name": "nib-rabbit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "commander": "^2.19.0"
+  }
+}
