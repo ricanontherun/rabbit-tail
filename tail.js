@@ -13,13 +13,10 @@ commander
     .option('--routingKeys <routingKeys>', 'Comma separated list of routing keys to consume')
     .option('--queuePrefix [--queuePrefix]', 'Transient queue prefix')
     .option('--auth [username:password]', 'Server authentication')
+    .option('--vhost [vhost]', 'RabbitMQ vhost')
     .parse(process.argv);
 
 // Parse out the CLI arguments.
-const cliArgs = {
-    host: commander.host || DEFAULT_AMQP_HOST
-};
-
 if (!commander.exchange) {
     commander.help()
 }
@@ -28,26 +25,28 @@ if (!commander.routingKeys) {
     commander.help();
 }
 
-cliArgs.exchange = commander.exchange;
-cliArgs.routingKeys = commander.routingKeys;
-cliArgs.queuePrefix = commander.queuePrefix;
+const main = (connectionOptions) => {
+    amqplib.connect(connectionOptions).then(run.bind(null, connectionOptions)).catch(() => {
+        console.error(chalk.red('Failed'), 'to connect to', connectionOptions.host);
+    });
+}
 
-const run = (connection) => {
-    console.log(chalk.green('Connected:'), cliArgs.host);
+const run = (connetionOptions, connection) => {
+    console.log(chalk.green('Connected:'), connectionOptions.host);
 
     // Properly close the connection on script stop.
     process.once('SIGINT', function() { connection.close(); });
 
     return connection.createChannel().then(async (channel) => {
-        await channel.checkExchange(cliArgs.exchange);
+        await channel.checkExchange(commander.exchange);
 
         // Create the transient queue.
         let transientQueueName;
 
-        if (cliArgs.queuePrefix) {
-            transientQueueName = cliArgs.queuePrefix;
+        if (commander.queuePrefix) {
+            transientQueueName = commander.queuePrefix;
         } else {
-            transientQueueName = `${cliArgs.exchange}`;
+            transientQueueName = `${commander.exchange}`;
         }
 
         const now = new Date();
@@ -63,9 +62,9 @@ const run = (connection) => {
 
         console.log(chalk.green("Created queue:"), queue.queue);
 
-        cliArgs.routingKeys.split(',').map(key => key.trim()).forEach(async (routingKey) => {
-            await channel.bindQueue(queue.queue, cliArgs.exchange, routingKey);
-            console.log(chalk.green('Bound:'), `${queue.queue} to ${cliArgs.exchange} via ${routingKey}`);
+        commander.routingKeys.split(',').map(key => key.trim()).forEach(async (routingKey) => {
+            await channel.bindQueue(queue.queue, commander.exchange, routingKey);
+            console.log(chalk.green('Bound:'), `${queue.queue} to ${commander.exchange} via ${routingKey}`);
         })
 
         // Setup a consumption callback.
@@ -74,13 +73,25 @@ const run = (connection) => {
         console.log("\n");
 
         function consumption(message) {
+            message.content = message.content.toString();
+
             // TODO: Might be nice to allow the specification of which message fields to print.
             console.log(JSON.stringify(message));
         };
     }).catch(console.error);
 }
 
-const connectionUrl = `amqp://${cliArgs.host}`;
-amqplib.connect(connectionUrl).then(run).catch(() => {
-    console.error(chalk.red('Failed'), 'to connect to', cliArgs.host);
-});
+const connectionOptions = {
+    protocol: 'amqp',
+    host: commander.host || DEFAULT_AMQP_HOST,
+    vhost: commander.vhost || '/'
+}
+
+if (commander.auth) {
+    const [username, password] = commander.auth.split(':');
+
+    connectionOptions.username = username;
+    connectionOptions.password = password;
+}
+
+main(connectionOptions);
