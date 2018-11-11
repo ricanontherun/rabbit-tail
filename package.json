@@ -1,10 +1,13 @@
 {
-  "name": "nib-rabbit",
+  "name": "rabbit-tail",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
+  "bin": {
+    "rabbit-tail": "./bin/tail.js"
+  },
+  "preferGlobal": true,
   "keywords": [],
-  "author": "",
+  "author": "Christian Roman",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.2",
