@@ -2,7 +2,8 @@ const amqplib = require('amqplib');
 const commander = require('commander');
 const chalk = require('chalk');
 
-const DEFAULT_AMQP_HOST = 'localhost';
+const DEFAULT_RABBITMQ_HOST = 'localhost';
+const DEFAULT_RABBITMQ_VHOST = '/';
 
 commander
     .version(require('./package.json').version)
@@ -26,8 +27,8 @@ if (!commander.routingKeys) {
 }
 
 const main = (connectionOptions) => {
-    amqplib.connect(connectionOptions).then(run.bind(null, connectionOptions)).catch(() => {
-        console.error(chalk.red('Failed'), 'to connect to', connectionOptions.host);
+    amqplib.connect(connectionOptions).then(run.bind(null, connectionOptions)).catch((err) => {
+        console.error(chalk.red('Failed'), 'to connect to', connectionOptions.host, err);
     });
 }
 
@@ -82,8 +83,8 @@ const run = async (connetionOptions, connection) => {
 
 const connectionOptions = {
     protocol: 'amqp',
-    host: commander.host || DEFAULT_AMQP_HOST,
-    vhost: commander.vhost || '/'
+    host: commander.host || DEFAULT_RABBITMQ_HOST,
+    vhost: commander.vhost || DEFAULT_RABBITMQ_VHOST
 }
 
 if (commander.auth) {
