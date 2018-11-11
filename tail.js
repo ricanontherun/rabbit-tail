@@ -31,54 +31,53 @@ const main = (connectionOptions) => {
     });
 }
 
-const run = (connetionOptions, connection) => {
+const run = async (connetionOptions, connection) => {
     console.log(chalk.green('Connected:'), connectionOptions.host);
 
     // Properly close the connection on script stop.
     process.once('SIGINT', function() { connection.close(); });
 
-    return connection.createChannel().then(async (channel) => {
-        await channel.checkExchange(commander.exchange);
+    const channel = await connection.createChannel();
 
-        // Create the transient queue.
-        let transientQueueName;
+    await channel.checkExchange(commander.exchange);
 
-        if (commander.queuePrefix) {
-            transientQueueName = commander.queuePrefix;
-        } else {
-            transientQueueName = `${commander.exchange}`;
-        }
+    // Create the transient queue.
+    let transientQueueName;
+    if (commander.queuePrefix) {
+        transientQueueName = commander.queuePrefix;
+    } else {
+        transientQueueName = `${commander.exchange}`;
+    }
 
-        const now = new Date();
-        transientQueueName += `.${now.getTime()}`;
+    const now = new Date();
+    transientQueueName += `.${now.getTime()}`;
 
-        const queue = await channel.assertQueue(transientQueueName, {
-            // Delete queue when consumer count drops to zero.
-            autoDelete: true,
+    const queue = await channel.assertQueue(transientQueueName, {
+        // Delete queue when consumer count drops to zero.
+        autoDelete: true,
 
-            // Make sure this channel is the only consumer.
-            exclusive: true
-        });
+        // Make sure this channel is the only consumer.
+        exclusive: true
+    });
 
-        console.log(chalk.green("Created queue:"), queue.queue);
+    console.log(chalk.green("Created queue:"), queue.queue);
 
-        commander.routingKeys.split(',').map(key => key.trim()).forEach(async (routingKey) => {
-            await channel.bindQueue(queue.queue, commander.exchange, routingKey);
-            console.log(chalk.green('Bound:'), `${queue.queue} to ${commander.exchange} via ${routingKey}`);
-        })
+    commander.routingKeys.split(',').map(key => key.trim()).forEach(async (routingKey) => {
+        await channel.bindQueue(queue.queue, commander.exchange, routingKey);
+        console.log(chalk.green('Bound:'), `${queue.queue} to ${commander.exchange} via ${routingKey}`);
+    })
 
-        // Setup a consumption callback.
-        await channel.consume(queue.queue, consumption, {noAck: true});
+    // Setup a consumption callback.
+    await channel.consume(queue.queue, consumption, {noAck: true});
 
-        console.log("\n");
+    console.log("\n");
 
-        function consumption(message) {
-            message.content = message.content.toString();
+    function consumption(message) {
+        message.content = message.content.toString();
 
-            // TODO: Might be nice to allow the specification of which message fields to print.
-            console.log(JSON.stringify(message));
-        };
-    }).catch(console.error);
+        // TODO: Might be nice to allow the specification of which message fields to print.
+        console.log(JSON.stringify(message));
+    };
 }
 
 const connectionOptions = {
