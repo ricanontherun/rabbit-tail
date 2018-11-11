@@ -24,3 +24,7 @@ You can also provide a prefix for the created transient queue.
 ```sh
 rabbit-tail tail --queuePrefix myDebugQueue
 ```
+
+## TODO
+
+1. Tests.

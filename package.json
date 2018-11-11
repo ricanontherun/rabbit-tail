@@ -5,10 +5,11 @@
   "bin": {
     "rabbit-tail": "./bin/tail.js"
   },
+  "homepage": "https://github.com/ricanontherun/rabbit-tail",
   "preferGlobal": true,
   "keywords": [],
   "author": "Christian Roman",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "amqplib": "^0.5.2",
     "chalk": "^2.4.1",
