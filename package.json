@@ -1,11 +1,11 @@
 {
   "name": "rabbit-tail",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
   "bin": {
     "rabbit-tail": "./bin/tail.js"
   },
-  "homepage": "https://github.com/ricanontherun/rabbit-tail",
+  "repository": "https://github.com/ricanontherun/rabbit-tail",
   "preferGlobal": true,
   "keywords": [],
   "author": "Christian Roman",
