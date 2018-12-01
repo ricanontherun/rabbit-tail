@@ -15,21 +15,6 @@ npm install -g rabbit-tail
 rabbit-tail --help
 ```
 
-
-### Tail all incoming messages on an exchange
-```sh
-rabbit-tail --host rmq.something.com:port --vhost / --exchange my-exhcnage
-```
-### Tail certain keys
-```sh
-rabbit-tail --host rmq.something.com:port --vhost / --exchange my-exchange --routingKeys key1,key2,...,keyN
-```
-
-### Provide a queue prefix, as opposed to the default usage of the exchange name.
-```sh
-rabbit-tail tail --queuePrefix myDebugQueue
-```
-
 ## TODO
 
 1. Tests.

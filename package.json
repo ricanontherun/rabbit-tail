@@ -1,6 +1,6 @@
 {
   "name": "rabbit-tail",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
   "bin": {
     "rabbit-tail": "./bin/tail.js"
@@ -13,6 +13,8 @@
   "dependencies": {
     "amqplib": "^0.5.2",
     "chalk": "^2.4.1",
-    "commander": "^2.19.0"
+    "commander": "^2.19.0",
+    "lodash": "^4.17.11",
+    "winston": "^3.1.0"
   }
 }
