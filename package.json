@@ -1,6 +1,6 @@
 {
   "name": "rabbit-tail",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
   "bin": {
     "rabbit-tail": "./bin/tail.js"
