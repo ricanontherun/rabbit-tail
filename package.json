@@ -2,6 +2,9 @@
   "name": "rabbit-tail",
   "version": "1.3.0",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint ."
+  },
   "bin": {
     "rabbit-tail": "./bin/tail.js"
   },
