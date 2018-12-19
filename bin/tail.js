@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const RabbitTailEngine = require('../lib/engine');
-const engine = new RabbitTailEngine(require('../lib/options'));
 const Logger = require('../lib/log');
+const options = require('../lib/options');
+
+const engine = new RabbitTailEngine(options);
 
 engine
   .start()
