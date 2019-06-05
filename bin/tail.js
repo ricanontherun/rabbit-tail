@@ -10,7 +10,7 @@ const logger = new Logger(options.application);
 amqpConnect(options).then((channel) => {
   logger.info('AMQP connection established.');
 
-  consd engine = new Engine(options, logger, channel);
+  const engine = new Engine(options, logger, channel);
 
   engine
     .start()
