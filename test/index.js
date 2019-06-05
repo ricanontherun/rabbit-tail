@@ -7,11 +7,6 @@ describe('rabbit-tail tests', () => {
 
   before(() => {
     // Setup a mock channel which we can observe
-    const conn = amqpMock.createConnection();
-
-    channel = conn.createChannel();
-
-    console.log(channel);
   });
 
   it("works", () => {
