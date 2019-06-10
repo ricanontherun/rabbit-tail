@@ -1,6 +1,6 @@
 {
   "name": "rabbit-tail",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
