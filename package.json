@@ -1,6 +1,6 @@
 {
   "name": "rabbit-tail",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A command line utility used to tail messages on a RabbitMQ exchange.",
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
@@ -19,7 +19,7 @@
     "amqplib": "^0.5.2",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "winston": "^3.1.0"
   },
   "devDependencies": {
